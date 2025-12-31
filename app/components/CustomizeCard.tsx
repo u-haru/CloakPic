@@ -155,7 +155,12 @@ export function CustomizeCard({
                     variant="text"
                     color="error"
                     size="small"
-                    onClick={() => setSettings(defaultSettings)}
+                    onClick={() =>
+                      setSettings((prev) => ({
+                        ...defaultSettings,
+                        maskDataUrl: prev.maskDataUrl,
+                      }))
+                    }
                   >
                     設定をデフォルトに戻す
                   </Button>
