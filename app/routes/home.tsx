@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { Box, Card, CardContent, Container, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, Container, Link, Stack, Typography } from "@mui/material";
 import { CustomizeCard } from "../components/CustomizeCard";
 import { PreviewCard } from "../components/PreviewCard";
 import { StepOneCard } from "../components/StepOneCard";
@@ -106,6 +106,21 @@ export default function Home() {
                 </Card>
               </Stack>
             </Stack>
+
+            <Box component="footer" sx={{ textAlign: "center", pt: 2 }}>
+              <Typography variant="caption" color="text.secondary">
+                GitHub:{" "}
+                <Link
+                  href="https://github.com/u-haru/CloakPic"
+                  target="_blank"
+                  rel="noreferrer"
+                  color="inherit"
+                  underline="hover"
+                >
+                  https://github.com/u-haru/CloakPic
+                </Link>
+              </Typography>
+            </Box>
           </Stack>
         </Stack>
       </Container>
