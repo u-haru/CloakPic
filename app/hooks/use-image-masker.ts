@@ -36,6 +36,7 @@ export function useImageMasker() {
   const [error, setError] = useState<string | null>(null);
   const lastRunKey = useRef<string | null>(null);
   const runIdRef = useRef(0);
+  const workerRef = useRef<Worker | null>(null);
 
   const activeMaskUrl = useMemo(() => {
     return settings.maskDataUrl || defaultMaskUrl;
@@ -45,6 +46,11 @@ export function useImageMasker() {
     if (typeof window === "undefined") {
       return;
     }
+
+    const worker = new Worker(new URL("../lib/masker-worker.ts", import.meta.url), {
+      type: "module",
+    });
+    workerRef.current = worker;
 
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -60,6 +66,11 @@ export function useImageMasker() {
     }
 
     setDefaultMaskUrl(createDefaultMask(DEFAULT_MASK_SIZE, DEFAULT_MASK_SIZE));
+
+    return () => {
+      worker.terminate();
+      workerRef.current = null;
+    };
   }, []);
 
   useEffect(() => {
@@ -151,11 +162,47 @@ export function useImageMasker() {
     const timer = window.setTimeout(() => {
       const runId = ++runIdRef.current;
       setError(null);
-      buildMaskedImage({
-        sourceUrl,
-        maskUrl: activeMaskUrl,
-        settings: maskerSettings,
-      })
+
+      const worker = workerRef.current;
+      const runInWorker =
+        worker &&
+        new Promise<Awaited<ReturnType<typeof buildMaskedImage>>>((resolve, reject) => {
+          const handleMessage = (event: MessageEvent) => {
+            if (!event.data || event.data.runId !== runId) {
+              return;
+            }
+            cleanup();
+            if (event.data.error) {
+              reject(new Error(event.data.error));
+            } else {
+              resolve(event.data.result);
+            }
+          };
+          const handleError = (workerError: ErrorEvent) => {
+            cleanup();
+            reject(workerError.error ?? new Error(workerError.message));
+          };
+          const cleanup = () => {
+            worker.removeEventListener("message", handleMessage);
+            worker.removeEventListener("error", handleError);
+          };
+
+          worker.addEventListener("message", handleMessage);
+          worker.addEventListener("error", handleError);
+          worker.postMessage({
+            runId,
+            sourceUrl,
+            maskUrl: activeMaskUrl,
+            settings: maskerSettings,
+          });
+        });
+
+      (runInWorker ??
+        buildMaskedImage({
+          sourceUrl,
+          maskUrl: activeMaskUrl,
+          settings: maskerSettings,
+        }))
         .then((result) => {
           if (runId !== runIdRef.current) return;
           lastRunKey.current = runKey;
