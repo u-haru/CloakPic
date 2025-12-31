@@ -21,7 +21,7 @@ const defaultSettings: Settings = {
   limitResolution: true,
   maxWidth: DEFAULT_MAX_SIZE,
   maxHeight: DEFAULT_MAX_SIZE,
-  maskStrength: 100,
+  maskStrength: 25,
   maskDataUrl: null,
 };
 

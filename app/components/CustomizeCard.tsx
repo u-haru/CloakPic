@@ -116,7 +116,7 @@ export function CustomizeCard({
 
               <Box>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography variant="subtitle2">マスク強度</Typography>
+                  <Typography variant="subtitle2">マスクのバランス</Typography>
                   <Stack direction="row" spacing={1} alignItems="center">
                     <Typography variant="caption" color="text.secondary">
                       {settings.maskStrength}%
@@ -148,7 +148,7 @@ export function CustomizeCard({
                   color="secondary"
                 />
                 <Typography variant="caption" color="text.secondary">
-                  低いほど白背景で薄く、高いほどマスクがくっきり出ます。
+                  数値が高いほど白(マスク)の範囲が広がり、低いほど黒(本体)の範囲が広がります。
                 </Typography>
                 <Stack direction="row" justifyContent="flex-end">
                   <Button

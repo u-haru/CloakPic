@@ -125,12 +125,13 @@ export function applyMaskToImageData(
     const maskR = maskData.data[i] / 255;
     const maskG = maskData.data[i + 1] / 255;
     const maskB = maskData.data[i + 2] / 255;
-    let wR = mapInterval(maskR, maskMin, maskMax, 0.5, 1);
-    let wG = mapInterval(maskG, maskMin, maskMax, 0.5, 1);
-    let wB = mapInterval(maskB, maskMin, maskMax, 0.5, 1);
-    let bR = mapInterval(r, baseMin, baseMax, 0, 0.5);
-    let bG = mapInterval(g, baseMin, baseMax, 0, 0.5);
-    let bB = mapInterval(b, baseMin, baseMax, 0, 0.5);
+    const balance = clamp(1 - options.maskStrength / 100, 0, 1);
+    let wR = mapInterval(maskR, maskMin, maskMax, balance, 1);
+    let wG = mapInterval(maskG, maskMin, maskMax, balance, 1);
+    let wB = mapInterval(maskB, maskMin, maskMax, balance, 1);
+    let bR = mapInterval(r, baseMin, baseMax, 0, balance);
+    let bG = mapInterval(g, baseMin, baseMax, 0, balance);
+    let bB = mapInterval(b, baseMin, baseMax, 0, balance);
 
     if (options.grayscale) {
       const wMean = (wR + wG + wB) / 3;
@@ -144,8 +145,7 @@ export function applyMaskToImageData(
     }
 
     const diff = (wR - bR + wG - bG + wB - bB) / 3;
-    const strength = clamp(options.maskStrength / 100, 0, 1);
-    const alpha = clamp(1 - diff * strength, 0, 1);
+    const alpha = clamp(1 - diff, 0, 1);
     const alphaSafe = Math.max(alpha, 1e-6);
 
     let outR = bR / alphaSafe;
