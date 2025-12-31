@@ -18,7 +18,8 @@
     "@react-router/serve": "7.11.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-router": "7.11.0"
+    "react-router": "7.11.0",
+    "isbot": "^5"
   },
   "devDependencies": {
     "@react-router/dev": "7.11.0",
@@ -26,6 +27,7 @@
     "@types/node": "^25",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "isbot": "^5.1.32",
     "jpeg-js": "^0.4.4",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
