@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/u-haru/cloakpic"
+    "url": "https://github.com/u-haru/CloakPic"
   },
   "scripts": {
     "build": "react-router build",
