@@ -1,11 +1,31 @@
-import { Box, Button, Card, CardContent, CardHeader, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  IconButton,
+  Stack,
+  Switch,
+  Typography,
+} from "@mui/material";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import ZoomInRoundedIcon from "@mui/icons-material/ZoomInRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 type PreviewCardProps = {
   resultUrl: string | null;
 };
 
 export function PreviewCard({ resultUrl }: PreviewCardProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [darkBackground, setDarkBackground] = useState(true);
+
   return (
     <Card elevation={4} sx={{ borderRadius: 4 }}>
       <CardHeader title="Preview" />
@@ -123,7 +143,16 @@ export function PreviewCard({ resultUrl }: PreviewCardProps) {
           </Typography>
         </Box>
         {resultUrl && (
-          <Stack direction="row" justifyContent="flex-end" mt={2}>
+          <Stack direction="row" justifyContent="flex-end" mt={2} spacing={1}>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<ZoomInRoundedIcon />}
+              onClick={() => setDialogOpen(true)}
+              sx={{ borderRadius: 999 }}
+            >
+              拡大表示
+            </Button>
             <Button
               variant="contained"
               color="primary"
@@ -138,6 +167,58 @@ export function PreviewCard({ resultUrl }: PreviewCardProps) {
           </Stack>
         )}
       </CardContent>
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography variant="subtitle1">拡大プレビュー</Typography>
+          <FormControlLabel
+            sx={{ ml: "auto" }}
+            control={
+              <Switch
+                checked={darkBackground}
+                onChange={(event) => setDarkBackground(event.target.checked)}
+              />
+            }
+            label={darkBackground ? "黒背景" : "白背景"}
+          />
+          <IconButton onClick={() => setDialogOpen(false)}>
+            <CloseRoundedIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              borderRadius: 3,
+              border: "1px solid",
+              borderColor: darkBackground ? "rgba(148, 163, 184, 0.4)" : "divider",
+              bgcolor: darkBackground ? "#000000" : "#ffffff",
+              color: darkBackground ? "#e2e8f0" : "#0f172a",
+              height: { xs: "60vh", md: "70vh" },
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              p: 2,
+            }}
+          >
+            {resultUrl ? (
+              <Box
+                component="img"
+                src={resultUrl}
+                alt={darkBackground ? "黒背景拡大プレビュー" : "白背景拡大プレビュー"}
+                sx={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}
+              />
+            ) : (
+              <Typography variant="caption" color="text.secondary">
+                変換後に表示されます。
+              </Typography>
+            )}
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
