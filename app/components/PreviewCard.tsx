@@ -85,7 +85,7 @@ export function PreviewCard({ resultUrl }: PreviewCardProps) {
               borderRadius: 3,
               border: "1px solid",
               borderColor: "#0f172a",
-              bgcolor: "#0f172a",
+              bgcolor: "#000000",
               color: "#e2e8f0",
               overflow: "hidden",
             }}
