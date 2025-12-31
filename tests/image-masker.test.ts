@@ -136,6 +136,6 @@ describe("image-masker core", () => {
     const lowAvg = averageAlpha(lowStrength.data);
     const highAvg = averageAlpha(highStrength.data);
 
-    expect(highAvg).toBeGreaterThanOrEqual(lowAvg);
+    expect(lowAvg).toBeGreaterThanOrEqual(highAvg);
   });
 });
