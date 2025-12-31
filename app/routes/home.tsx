@@ -58,22 +58,8 @@ export default function Home() {
                   </Typography>
                   <Typography variant="h3">Tap to reveal image maker</Typography>
                 </Box>
-                <Box
-                  sx={{
-                    px: 2,
-                    py: 1,
-                    borderRadius: 999,
-                    bgcolor: "rgba(15, 23, 42, 0.08)",
-                    color: "text.primary",
-                    fontWeight: 600,
-                    fontSize: 12,
-                    letterSpacing: 0.6,
-                  }}
-                >
-                  Client-only / Local storage
-                </Box>
               </Stack>
-              <Typography variant="body2" color="text.secondary" maxWidth={720}>
+              <Typography variant="body2" color="text.secondary">
                 白背景と黒背景の見え方の差を使って、タイムラインではマスクだけ、画像ビューアでは本体が見えるPNGを作ります。
                 処理はすべてブラウザ内で完結します。
               </Typography>
