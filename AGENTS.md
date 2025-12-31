@@ -3,9 +3,16 @@
 ## Project Structure & Module Organization
 - `app/`: React Router app source (routes, root layout, styles).
   - `app/routes/`: Route modules (e.g., `home.tsx`).
+  - `app/components/`: UI cards, preview, and drop zone components (MUI).
+  - `app/hooks/`: State hooks (e.g., `use-image-masker`).
+  - `app/lib/`: Image masking + canvas utilities.
+  - `app/theme.ts`: MUI theme and typography setup.
   - `app/root.tsx`: App shell and providers.
-  - `app/app.css`: Global styles and Tailwind layers.
+  - `app/app.css`: Minimal global styles (MUI CssBaseline handles most).
 - `public/`: Static assets served as-is (e.g., `favicon.ico`).
+- `tests/`: Vitest unit tests for masking logic.
+- `test_data/`: Sample images for tests.
+- `types/`: Local type declarations (e.g., `jpeg-js.d.ts`).
 - `merge_sample.py`: Local utility script (not part of the app build).
 - Config: `react-router.config.ts`, `vite.config.ts`, `tsconfig.json`.
 
@@ -13,18 +20,19 @@
 - `npm run dev`: Start the React Router dev server.
 - `npm run build`: Build the production bundle.
 - `npm run start`: Serve the built app from `./build/server/index.js`.
+- `npm test`: Run Vitest tests.
 - `npm run typecheck`: Generate route types and run TypeScript checks.
 
 ## Coding Style & Naming Conventions
-- Language: TypeScript + React (TSX) with Tailwind CSS utilities.
+- Language: TypeScript + React (TSX) with MUI components and `sx` styling.
 - Indentation: 2 spaces (match existing TS/TSX files).
 - Naming: components in `PascalCase`, hooks in `useCamelCase`, files in `kebab-case` or existing route naming (`home.tsx`).
 - Formatting: no formatter configured; keep diffs minimal and follow local patterns.
 
 ## Testing Guidelines
-- No automated test framework configured yet.
-- Use `npm run typecheck` as the current baseline for correctness.
-- If you add tests, document the framework and add a script to `package.json`.
+- Unit tests use Vitest (`tests/` + `test_data/`).
+- Run `npm test` for unit tests and `npm run typecheck` for TypeScript checks.
+- If you add new test tooling, document it and add a script to `package.json`.
 
 ## Commit & Pull Request Guidelines
 - Git history is minimal (single initial commit); no established convention.
