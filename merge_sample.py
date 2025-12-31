@@ -1,4 +1,13 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#   "numpy",
+#   "Pillow",
+# ]
+# ///
+# https://gist.github.com/u-haru/d0d0054873049f736f23473f3e84a465
+
 import argparse
 import sys
 import numpy as np
