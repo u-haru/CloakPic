@@ -211,7 +211,10 @@ export function createDefaultMask(width: number, height: number) {
   ctx.globalAlpha = 1;
 
   ctx.fillStyle = "#f2e9dc";
-  ctx.fillRect(width * 0.08, height * 0.16, width * 0.84, height * 0.68);
+  const inset = Math.max(8, Math.round(width * 0.08));
+  const innerWidth = Math.max(1, width - inset * 2);
+  const innerHeight = Math.max(1, height - inset * 2);
+  ctx.fillRect(inset, inset, innerWidth, innerHeight);
 
   ctx.fillStyle = "#201a14";
   ctx.font = `700 ${Math.floor(Math.min(width, height) / 11)}px "Space Grotesk", sans-serif`;
