@@ -87,7 +87,22 @@ export function applyMaskToImageData(
     throw new Error("画像サイズが一致していません。");
   }
 
-  const output = new Uint8ClampedArray(baseData.data.length);
+  const mapInterval = (
+    value: number,
+    srcMin: number,
+    srcMax: number,
+    dstMin: number,
+    dstMax: number,
+  ) => {
+    const scale =
+      srcMax - srcMin === 0 ? 0 : (dstMax - dstMin) / (srcMax - srcMin);
+    return clamp((value - srcMin) * scale + dstMin, dstMin, dstMax);
+  };
+
+  let maskMin = 1;
+  let maskMax = 0;
+  let baseMin = 1;
+  let baseMax = 0;
   for (let i = 0; i < baseData.data.length; i += 4) {
     const r = baseData.data[i] / 255;
     const g = baseData.data[i + 1] / 255;
@@ -96,34 +111,56 @@ export function applyMaskToImageData(
     const maskG = maskData.data[i + 1] / 255;
     const maskB = maskData.data[i + 2] / 255;
 
-    const originalLum = computeLuminance(r, g, b);
-    const maskLumRaw = computeLuminance(maskR, maskG, maskB);
-    const maskLum = maskValue(maskLumRaw, options.maskStrength);
+    baseMin = Math.min(baseMin, r, g, b);
+    baseMax = Math.max(baseMax, r, g, b);
+    maskMin = Math.min(maskMin, maskR, maskG, maskB);
+    maskMax = Math.max(maskMax, maskR, maskG, maskB);
+  }
 
-    const targetLum = Math.min(originalLum, maskLum);
-    const alpha = clamp(1 + targetLum - maskLum, 0, 1);
+  const output = new Uint8ClampedArray(baseData.data.length);
+  for (let i = 0; i < baseData.data.length; i += 4) {
+    const r = baseData.data[i] / 255;
+    const g = baseData.data[i + 1] / 255;
+    const b = baseData.data[i + 2] / 255;
+    const maskR = maskData.data[i] / 255;
+    const maskG = maskData.data[i + 1] / 255;
+    const maskB = maskData.data[i + 2] / 255;
+    let wR = mapInterval(maskR, maskMin, maskMax, 0.5, 1);
+    let wG = mapInterval(maskG, maskMin, maskMax, 0.5, 1);
+    let wB = mapInterval(maskB, maskMin, maskMax, 0.5, 1);
+    let bR = mapInterval(r, baseMin, baseMax, 0, 0.5);
+    let bG = mapInterval(g, baseMin, baseMax, 0, 0.5);
+    let bB = mapInterval(b, baseMin, baseMax, 0, 0.5);
 
-    let outR = 0;
-    let outG = 0;
-    let outB = 0;
-
-    if (alpha > 0) {
-      if (options.grayscale) {
-        const value = clamp(targetLum / alpha, 0, 1);
-        outR = value;
-        outG = value;
-        outB = value;
-      } else {
-        const scale = originalLum > 0 ? targetLum / originalLum : 0;
-        outR = clamp((r * scale) / alpha, 0, 1);
-        outG = clamp((g * scale) / alpha, 0, 1);
-        outB = clamp((b * scale) / alpha, 0, 1);
-      }
+    if (options.grayscale) {
+      const wMean = (wR + wG + wB) / 3;
+      const bMean = (bR + bG + bB) / 3;
+      wR = wMean;
+      wG = wMean;
+      wB = wMean;
+      bR = bMean;
+      bG = bMean;
+      bB = bMean;
     }
 
-    output[i] = Math.round(outR * 255);
-    output[i + 1] = Math.round(outG * 255);
-    output[i + 2] = Math.round(outB * 255);
+    const diff = (wR - bR + wG - bG + wB - bB) / 3;
+    const strength = clamp(options.maskStrength / 100, 0, 1);
+    const alpha = clamp(1 - diff * strength, 0, 1);
+    const alphaSafe = Math.max(alpha, 1e-6);
+
+    let outR = bR / alphaSafe;
+    let outG = bG / alphaSafe;
+    let outB = bB / alphaSafe;
+
+    if (alpha < 1e-3) {
+      outR = wR;
+      outG = wG;
+      outB = wB;
+    }
+
+    output[i] = Math.round(clamp(outR, 0, 1) * 255);
+    output[i + 1] = Math.round(clamp(outG, 0, 1) * 255);
+    output[i + 2] = Math.round(clamp(outB, 0, 1) * 255);
     output[i + 3] = Math.round(alpha * 255);
   }
 
