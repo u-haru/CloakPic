@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import jpeg from "jpeg-js";
+import { PNG } from "pngjs";
 import {
   applyMaskToImageData,
   fitIntoBox,
@@ -10,9 +10,9 @@ import {
 
 const testDataDir = join(process.cwd(), "test_data");
 
-function loadJpeg(path: string): ImageDataLike {
+function loadPng(path: string): ImageDataLike {
   const buffer = readFileSync(path);
-  const decoded = jpeg.decode(buffer, { useTArray: true });
+  const decoded = PNG.sync.read(buffer);
   return {
     width: decoded.width,
     height: decoded.height,
@@ -71,8 +71,8 @@ function averageAlpha(data: Uint8ClampedArray) {
   return count === 0 ? 0 : sum / count;
 }
 
-const sourceImage = loadJpeg(join(testDataDir, "img_sample.jpg"));
-const maskImage = loadJpeg(join(testDataDir, "mask_sample.jpg"));
+const sourceImage = loadPng(join(testDataDir, "img_sample.png"));
+const maskImage = loadPng(join(testDataDir, "mask_sample.png"));
 const fittedSource = fitImageIntoCanvas(
   sourceImage,
   maskImage.width,
