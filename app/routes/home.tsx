@@ -8,11 +8,11 @@ import { useImageMasker } from "../hooks/use-image-masker";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Tw Img Masker" },
+    { title: "CloakPic" },
     {
       name: "description",
       content:
-        "Twitter/X向けに、白背景と黒背景で見え方が変わる画像を作るローカルツール。",
+        "Twitter/Xなどで、白背景と黒背景で見え方が変わる画像を作るローカルツール。",
     },
   ];
 }
@@ -54,7 +54,7 @@ export default function Home() {
               >
                 <Box>
                   <Typography variant="overline" color="text.secondary">
-                    Tw Img Masker
+                    CloakPic
                   </Typography>
                   <Typography variant="h3">Tap to reveal image maker</Typography>
                 </Box>
@@ -99,7 +99,7 @@ export default function Home() {
                     <Typography variant="subtitle2">Tips</Typography>
                     <Stack spacing={1} mt={1}>
                       <Typography variant="caption" color="text.secondary" children="・縦横比が違う場合、画像はマスク内に収まるよう縮小されます。" />
-                      <Typography variant="caption" color="text.secondary" children="・出力はPNGです。保存後にそのままTwitter/Xへアップロードしてください。" />
+                      <Typography variant="caption" color="text.secondary" children="・出力はPNGです。保存後にそのままTwitter/Xへアップロードできます。" />
                       <Typography variant="caption" color="text.secondary" children="・マスクや設定はローカルストレージに保存され、外部には送信されません。" />
                     </Stack>
                   </CardContent>

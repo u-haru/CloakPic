@@ -10,7 +10,7 @@ import {
   type MaskerSettings,
 } from "../lib/image-masker";
 
-const STORAGE_KEY = "tw-img-masker:settings";
+const STORAGE_KEY = "cloakpic:settings";
 
 type Settings = MaskerSettings & {
   maskDataUrl: string | null;
