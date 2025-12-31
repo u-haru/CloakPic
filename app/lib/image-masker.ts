@@ -1,5 +1,5 @@
-export const DEFAULT_MAX_SIZE = 1024;
-export const DEFAULT_MASK_SIZE = 1024;
+export const DEFAULT_MAX_SIZE = 920;
+export const DEFAULT_MASK_SIZE = 920;
 
 export type MaskerSettings = {
   grayscale: boolean;

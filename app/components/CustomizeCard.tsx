@@ -109,7 +109,7 @@ export function CustomizeCard({
                 (resultMeta.width >= DEFAULT_MAX_SIZE ||
                   resultMeta.height >= DEFAULT_MAX_SIZE) && (
                   <Typography variant="caption" sx={{ color: "warning.main", mt: -1 }}>
-                    1024px以上の画像はTwitter/X側で再変換されて
+                    高解像度の画像はTwitter/X側で再変換されて
                     正しく表示されない可能性があります。
                   </Typography>
                 )}
