@@ -41,15 +41,6 @@ export function CustomizeCard({
           </AccordionSummary>
           <AccordionDetails>
             <Stack spacing={3}>
-              <Stack direction="row" justifyContent="flex-end">
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={() => setSettings(defaultSettings)}
-                >
-                  設定をデフォルトに戻す
-                </Button>
-              </Stack>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <FormControlLabel
                   control={
@@ -80,10 +71,6 @@ export function CustomizeCard({
                   label="解像度制限"
                 />
               </Stack>
-              <Typography variant="caption" color="text.secondary" sx={{ mt: -1 }}>
-                現在の出力: {resultMeta ? `${resultMeta.width} × ${resultMeta.height}px` : "未生成"}
-              </Typography>
-
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <TextField
                   label="最大幅 (px)"
@@ -114,6 +101,18 @@ export function CustomizeCard({
                   fullWidth
                 />
               </Stack>
+              <Typography variant="caption" color="text.secondary" sx={{ mt: -1 }}>
+                現在の出力: {resultMeta ? `${resultMeta.width} × ${resultMeta.height}px` : "未生成"}
+              </Typography>
+              {!settings.limitResolution &&
+                resultMeta &&
+                (resultMeta.width >= DEFAULT_MAX_SIZE ||
+                  resultMeta.height >= DEFAULT_MAX_SIZE) && (
+                  <Typography variant="caption" sx={{ color: "warning.main", mt: -1 }}>
+                    1024px以上の画像はTwitter/X側で再変換されて
+                    正しく表示されない可能性があります。
+                  </Typography>
+                )}
 
               <Box>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -151,6 +150,16 @@ export function CustomizeCard({
                 <Typography variant="caption" color="text.secondary">
                   低いほど白背景で薄く、高いほどマスクがくっきり出ます。
                 </Typography>
+                <Stack direction="row" justifyContent="flex-end">
+                  <Button
+                    variant="text"
+                    color="error"
+                    size="small"
+                    onClick={() => setSettings(defaultSettings)}
+                  >
+                    設定をデフォルトに戻す
+                  </Button>
+                </Stack>
               </Box>
             </Stack>
           </AccordionDetails>
