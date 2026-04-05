@@ -5,7 +5,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   base: process.env.GITHUB_PAGES
-      ? "/CloakPic/"
+      ? "CloakPic"
       : "./",
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
 });
